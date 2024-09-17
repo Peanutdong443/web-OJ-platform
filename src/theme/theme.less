@@ -1,0 +1,179 @@
+// 亮色start
+@light-bg-color: #FBFBFB;
+@light-text-color: #2c254a;
+@light-aside-color: #fff;
+@light-aside-border-color: #EEEEEE;
+@light-btn-color: #5A45AA;
+@light-btn-bg-color: rgba(90, 69, 170, 0.1);
+@light-card-color:rgba(255, 255, 255, 0.1);
+// 亮色end
+
+// 暗色start
+@dark-bg-color: #2c254a;
+@dark-text-color: #fff;
+@dark-aside-color: #342e59;
+@dark-aside-border-color: #342e59;
+@dark-btn-color: #fff;
+@dark-btn-bg-color: #fff;
+@dark-card-color: rgba(59,51,99,1);
+// 暗色end
+.el-radio-button__orig-radio:checked+.el-radio-button__inner{
+    background-color:@light-btn-color !important;
+    border-color:@light-btn-color !important;
+}
+body {
+    margin: 0;
+    padding: 0;
+
+    &.theme-light {
+        .generate-theme(@light-bg-color, @light-text-color, @light-aside-color, @light-aside-border-color, @light-btn-color, @light-btn-bg-color,@light-card-color);
+    }
+
+    &.theme-dark {
+        .generate-theme(@dark-bg-color, @dark-text-color, @dark-aside-color, @dark-aside-border-color, @dark-btn-color, @dark-btn-bg-color,@dark-card-color);
+    }
+}
+
+// less混合生成主题样式
+.generate-theme(@bg-color, @text-color, @aside-color, @aside-border-color, @btn-color, @btn-bg-color,@card-color) {
+    #app {
+        background-color: @bg-color;
+    }
+
+    .box-card {
+        background-color: @bg-color;
+    }
+
+    .container {
+        background-color: @bg-color;
+        background-color: @bg-color;
+    }
+
+    // .el-aside {
+    //     background-color: @aside-color;
+    //     // color: @text-color;
+    //     color: #d7d8da !important;
+    //     border-color: @aside-border-color;
+    // }
+
+    .el-header {
+        background-color: @bg-color;
+        color: @text-color;
+    }
+
+    .el-menu {
+        background-color: @aside-color;
+        color: @text-color;
+    }
+
+    .el-menu-item ,.el-submenu__title{
+        color: @text-color;
+    }
+
+    .el-dropdown-link {
+        color: @text-color;
+    }
+
+    .el-form-item__label {
+        color: @text-color;
+    }
+
+    .el-drawer {
+        background-color: @bg-color;
+    }
+
+    .el-drawer__header {
+        color: @text-color;
+    }
+
+    .haomiao {
+        color: @text-color;
+    }
+
+    .el-button--default,
+    .el-button--default:hover,
+    .el-button--default:focus {
+        border-color: @btn-color;
+        color: #5A45AA;
+        background-color: @btn-bg-color;
+    }
+    
+    .el-select-dropdown__item.selected {
+        color: #5A45AA;
+    }
+
+    .el-button--primary {
+        background-color: #5A45AA;
+        border-color: #5A45AA;
+    }
+
+    .el-input__inner:focus,
+    .el-textarea__inner:focus,
+    .el-select .el-input.is-focus .el-input__inner {
+        border-color: #5A45AA !important;
+    }
+    .el-dialog{
+        background-color: @bg-color;
+        color: @text-color;
+    }
+    .el-dialog__title,
+    .el-dialog__headerbtn .el-dialog__close{
+        color: @text-color;
+
+    }
+    .is-plain{
+        border: 1px dashed;
+        border-color: #5A45AA;
+        &:hover{
+            border: 1px dashed;
+            border-color: #5A45AA;
+        }
+    }
+    .nodata{
+        color: @text-color;
+    }
+    .text-color{
+        color: @text-color;
+    }
+    .el-button--text{
+        color: #5A45AA;
+    }
+    .content-card,.content-card-act{
+        color: @text-color;
+        background-color: @card-color;
+        border-color: @card-color;
+        flex-direction: column;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
+    }
+    .search-container{
+        .box-card{
+            background-color: @card-color;
+            border-color: @card-color;
+            box-shadow: 0 0px 3px 0 rgba(0, 0, 0, 0.1) !important;
+        }
+    }
+    .title-content{
+        color: @text-color;
+    }
+
+        .title-div{
+            border-bottom:1px solid @btn-color;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
+        }
+}
+
+
+.box-card {
+    &.theme-light {
+        .generate-theme(@light-bg-color, @light-text-color, @light-aside-color, @light-aside-border-color, @light-btn-color, @light-btn-bg-color,@light-card-color);
+    }
+
+    &.theme-dark {
+        .generate-theme(@dark-bg-color, @dark-text-color, @dark-aside-color, @dark-aside-border-color, @dark-btn-color, @dark-btn-bg-color,@dark-card-color);
+    }
+}
+.el-drawer__header{
+    margin-bottom: 0 !important;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 10px !important;
+}
