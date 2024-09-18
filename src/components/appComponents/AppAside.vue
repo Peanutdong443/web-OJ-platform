@@ -68,7 +68,7 @@ export default {
   name: "AppAside",
   data() {
     return {
-      userType: 0,
+      userType: null,
     };
   },
   created(){
