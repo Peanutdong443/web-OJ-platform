@@ -12,8 +12,9 @@
         <span style="font-size: 16px; font-weight: bold">实验系统 </span>
       </div>
       <div style="height: calc(100vh - 80px); overflow-y: auto">
-        <el-menu default-active="/examManage" :router="true" ref="menu" :unique-opened="true" active-text-color="white">
-          <el-menu-item index="/examManage">
+        <el-menu :router="true" ref="menu" default-active="/examManage"
+        :unique-opened="true" active-text-color="white">
+          <el-menu-item  index="/examManage" @click="navigateTo('/examManage')">
             &nbsp;&nbsp;
             <i class="iconfont icon-kaoshi3" ></i>
             <span>&nbsp;&nbsp;实验列表</span>
@@ -21,13 +22,13 @@
 
           <template v-if="this.userType == 0"></template>
           <template v-if="this.userType == 2">
-            <el-menu-item index="/submitManage">
+            <el-menu-item index="/submitManage" @click="navigateTo('/submitManage')">
               &nbsp;&nbsp;
               <i class="iconfont icon-xueyuan-kaoshi"></i>
               <span>&nbsp;&nbsp;提交列表</span>
             </el-menu-item>
 
-            <el-menu-item index="/personCenter">
+            <el-menu-item index="/personCenter" @click="navigateTo('/personCenter')">
               &nbsp;&nbsp;
               <i class="iconfont icon-gerenxinxi"></i>
               <span>&nbsp;&nbsp;个人中心</span>
@@ -36,19 +37,19 @@
 
           <template v-if="this.userType == 1">
 
-            <el-menu-item index="/explRelease">
+            <el-menu-item index="/explRelease" @click="navigateTo('/explRelease')">
               &nbsp;
               <i class="el-icon-s-data"></i>
               <span>&nbsp;实验发布</span>
             </el-menu-item>
 
-            <el-menu-item index="/userManage">
+            <el-menu-item index="/userManage" @click="navigateTo('/userManage')">
               &nbsp;
               <i class="el-icon-document"></i>
               <span>&nbsp;学生管理</span>
             </el-menu-item>
 
-            <el-menu-item index="/personCenter">
+            <el-menu-item index="/personCenter" @click="navigateTo('/personCenter')">
               &nbsp;&nbsp;
               <i class="iconfont icon-gerenxinxi"></i>
               <span>&nbsp;&nbsp;个人中心</span>
@@ -62,17 +63,24 @@
   </el-row>
 </template>
 <script>
+
 export default {
   name: "AppAside",
   data() {
     return {
       userType: 0,
-      activePath: "/examManager",
     };
   },
   created(){
     if(localStorage.getItem("usertype")!=null)this.userType=localStorage.getItem("usertype");
+    this.$router.push("/examManage");
   },
+  methods:{
+    navigateTo(path) {
+      this.$router.push(path);
+    }
+  }
+  
 };
 </script>
 <style lang="less">
