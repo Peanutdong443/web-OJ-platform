@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="380px">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary">重置密码</el-button>
+            <el-button size="mini" type="primary" @click="resetPwd(scope.row.uid)">重置密码</el-button>
             <el-button size="mini" v-if="scope.row.disabled != '1'">禁用</el-button>
             <el-button size="mini" v-else>开启</el-button>
             <el-button size="mini" type="danger" @click="deleteTS(scope.row.uid)">删除</el-button>
@@ -41,7 +41,7 @@
     <div>
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
         :current-page="queryInfo.pageNum" :page-sizes="[1, 2, 5, 100]" :page-size="queryInfo.pageSize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total">
+        layout="total, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
 
@@ -86,6 +86,7 @@
 
 <script>
 import http from '../../http.js'
+import {resetPwd} from "@/api/system";
 export default {
   data() {
     return {
@@ -138,6 +139,11 @@ export default {
       else this.$message.error("删除失败");
       location.reload(true);
     },
+    async resetPwd(id){
+      const{data:res}=await http.get("/resetPwd",{params:{sid:id}});
+      if(res.code==200)this.$message.success("密码重置成功");
+      else this.$message.error("删密码重置失败");
+    }
 
   },
 };

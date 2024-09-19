@@ -7,7 +7,7 @@
         </el-col>
         <el-col :span="12" style="padding-left: 20px">
           <img src="@/assets/logo.jpg" align="middle" style="width:90px;height:90px;">
-          <h2 class="title">OJ实验系统-注册</h2>
+          <h2 class="title" style="color:rgb(125,11,65);">OJ实验系统-注册</h2>
           <el-form ref="registerFormRef" :rules="registerRules" :model="registerForm" class="register_form"
             label-width="0">
             <el-form-item prop="usertype">
@@ -34,7 +34,7 @@
               <el-button type="primary" round @click="register()" style="width: 100%">注册</el-button>
 
             </el-form-item>
-            <p class="tologin" @click="toLogin()">登录</p>
+            <p class="tologin" style="color:rgb(125,11,65);" @click="toLogin()">登录</p>
 
           </el-form>
         </el-col>
@@ -139,7 +139,7 @@ export default {
     background-color: #ffffff;
 
     .title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       text-align: center;
       margin: 0 0 30px 0;
@@ -151,7 +151,6 @@ export default {
   position: absolute;
   bottom: 0%;
   width: 45%;
-  padding: 0 10;
   box-sizing: border-box;
 }
 
@@ -163,5 +162,11 @@ export default {
   position: relative;
   top: 5px;
   color: #666;
+}
+.el-radio{
+  color:rgb(125,11,65);
+}
+.span{
+  color:rgb(125,11,65);
 }
 </style>

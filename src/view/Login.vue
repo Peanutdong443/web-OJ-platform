@@ -163,7 +163,7 @@ export default {
 
     .title {
       color: rgb(125,11,65);
-      font-size: 25px;
+      font-size: 22px;
       font-weight: bold;
       text-align: center;
       margin: 0 0 30px 0;
