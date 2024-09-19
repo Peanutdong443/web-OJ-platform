@@ -19,7 +19,7 @@
 
             <!-- 用户账号 -->
             <el-form-item prop="uid">
-              <el-input v-model="loginForm.uid" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
+              <el-input  v-model="loginForm.uid" prefix-icon="el-icon-user" placeholder="请输入账号"></el-input>
             </el-form-item>
 
             <!-- 密码 -->
@@ -35,8 +35,8 @@
             </el-form-item>
 
             <p class="extrapart">
-              <span @click="toRegister()">注册账号</span>
-              <span @click="visitLogin()" style="margin-left: 20px; display: inline-block">游客登录</span>
+              <span style="color:rgb(125,11,65)"@click="toRegister()">注册账号</span>
+              <span @click="visitLogin()" style="margin-left: 20px; display: inline-block;color:rgb(125,11,65)">游客登录</span>
             </p>
 
           </el-form>
@@ -162,7 +162,8 @@ export default {
     background-color: #ffffff;
 
     .title {
-      font-size: 20px;
+      color: rgb(125,11,65);
+      font-size: 25px;
       font-weight: bold;
       text-align: center;
       margin: 0 0 30px 0;
@@ -191,5 +192,11 @@ export default {
   position: relative;
   top: 5px;
   color: #666;
+}
+.el-radio{
+  color:rgb(125,11,65);
+}
+.span{
+  color:rgb(125,11,65);
 }
 </style>

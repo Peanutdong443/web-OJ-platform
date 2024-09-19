@@ -9,7 +9,7 @@
         ">
         <img src="@/assets/logo.jpg" alt="" style="width: 40px;">
         &nbsp;&nbsp;
-        <span style="font-size: 16px; font-weight: bold;color:rgb(125,11,65)">实验系统 </span>
+        <span style="font-size: 16px; font-weight: bold;color:rgb(125,11,65);font-size: 20px">OJ实验系统 </span>
       </div>
       <div style="height: calc(100vh - 80px); overflow-y: auto">
         <el-menu :router="true" ref="menu" text-color="rgb(125,11,65)" active-text-color="white" default-active="/examManage"
