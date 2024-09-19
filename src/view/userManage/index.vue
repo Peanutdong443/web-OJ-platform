@@ -12,7 +12,7 @@
           </el-form>
         </div>
         <div class="search-btn-container" style="display: inline-block; vertical-align: top">
-          <el-button round type="primary" style="margin-top: 2px;" @click="handleSearch()" size="medium">查询</el-button>
+          <el-button round type="primary" style="margin-top: 2px;" @click="getStuList()" size="medium">查询</el-button>
         </div>
       </el-card>
     </div>
@@ -31,7 +31,7 @@
             <el-button size="mini" type="primary">重置密码</el-button>
             <el-button size="mini" v-if="scope.row.disabled != '1'">禁用</el-button>
             <el-button size="mini" v-else>开启</el-button>
-            <el-button size="mini" type="danger">删除</el-button>
+            <el-button size="mini" type="danger" @click="deleteTS(scope.row.uid)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,8 +90,8 @@ export default {
   data() {
     return {
       tableData: [{
-        uid: 20,
-        temp: 1,
+        uid: null,
+        temp: null,
       }],
       queryInfo: {
         query: null,
@@ -131,8 +131,13 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.pageNum = newPage;
       this.getUserList();
-    }
-
+    },
+    async deleteTS(id) {
+      const{data:res}=await http.delete("/deleteStuList", {params:{sid:id}});
+      if(res.code==200)this.$message.success("删除成功");
+      else this.$message.error("删除失败");
+      location.reload(true);
+    },
 
   },
 };

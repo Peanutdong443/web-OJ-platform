@@ -54,7 +54,7 @@ export default {
       // 表单数据对象
       loginForm: {
         uid: "2021150131",
-        password: "$z12345678",
+        password: "$z12345679",
         usertype: "1",
       },
       // 校验对象
@@ -180,7 +180,6 @@ export default {
   position: absolute;
   bottom: 0%;
   width: 45%;
-  padding: 0 10;
   box-sizing: border-box;
 }
 

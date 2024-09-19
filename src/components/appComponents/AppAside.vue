@@ -9,14 +9,14 @@
         ">
         <img src="@/assets/logo.jpg" alt="" style="width: 40px;">
         &nbsp;&nbsp;
-        <span style="font-size: 16px; font-weight: bold">实验系统 </span>
+        <span style="font-size: 16px; font-weight: bold;color:rgb(125,11,65)">实验系统 </span>
       </div>
       <div style="height: calc(100vh - 80px); overflow-y: auto">
-        <el-menu :router="true" ref="menu" default-active="/examManage"
-        :unique-opened="true" active-text-color="white">
+        <el-menu :router="true" ref="menu" text-color="rgb(125,11,65)" active-text-color="white" default-active="/examManage"
+        :unique-opened="true">
           <el-menu-item  index="/examManage" @click="navigateTo('/examManage')">
             &nbsp;&nbsp;
-            <i class="iconfont icon-kaoshi3" ></i>
+            <i  class="iconfont icon-kaoshi3" ></i>
             <span>&nbsp;&nbsp;实验列表</span>
           </el-menu-item>
 
@@ -112,9 +112,15 @@ export default {
   }
 
   /* 设置激活菜单项的背景颜色 */
-.el-menu-item.is-active {
-  background-color: rgb(125,11,65); /* 你想要的颜色 */
-}
+  .el-menu-item.is-active {
+    background-color: rgb(125,11,65); /* 你想要的颜色 */
+  }
+  i{
+    color: rgb(125,11,65);
+    .is-active{
+      color:white;
+    }
+  }
 
 }
 </style>
