@@ -19,7 +19,7 @@
         ></el-table-column>
         <el-table-column
           prop="auditStatus"
-          label="提交状态"
+          label="提交运行结果"
           align="center"
         >
         <template slot-scope="scope">
@@ -33,13 +33,7 @@
             <el-button
               size="mini"
               @click="handleToSubmitWork(scope.$index, scope.row)"
-              >提交实验</el-button
-            >
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDeleteItem(scope.$index, scope.row)"
-              >删除</el-button
+              >查看提交</el-button
             >
           </template>
         </el-table-column>

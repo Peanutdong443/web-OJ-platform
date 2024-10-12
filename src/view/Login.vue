@@ -114,7 +114,6 @@ export default {
           await this.$router.push("/home");
 
         } else if (res.code == 501) {
-
           this.$message.error("用户不存在！");
         } else if (res.code == 503) {
           this.$message.error("密码错误！");

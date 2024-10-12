@@ -9,12 +9,16 @@
               <el-input v-model="queryInfo.query" style="width:500px;" placeholder="请输入需要查询的学生账号或姓名"
                 clearable></el-input>
             </el-form-item>
+            <el-form-item>
+              <div class="search-btn-container" style="display: inline-block; vertical-align: top">
+                <el-button @click="getStuList()" round type="primary" style="margin-top: 2px;" size="medium">查询</el-button>
+              </div>
+            </el-form-item>
+
           </el-form>
         </div>
-        <div class="search-btn-container" style="display: inline-block; vertical-align: top">
-          <el-button round type="primary" style="margin-top: 2px;" @click="getStuList()" size="medium">查询</el-button>
-        </div>
       </el-card>
+
     </div>
 
     <div class="table-content">
@@ -29,8 +33,8 @@
         <el-table-column label="操作" align="center" width="380px">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="resetPwd(scope.row.uid)">重置密码</el-button>
-            <el-button size="mini" v-if="scope.row.disabled != '1'">禁用</el-button>
-            <el-button size="mini" v-else>开启</el-button>
+            <el-button size="mini" v-if="scope.row.temp == '1'" type="warning" @click="disable(scope.row.uid)">禁用</el-button>
+            <el-button size="mini" v-else type="success" @click="enable(scope.row.uid)">开启</el-button>
             <el-button size="mini" type="danger" @click="deleteTS(scope.row.uid)">删除</el-button>
           </template>
         </el-table-column>
@@ -90,15 +94,15 @@ export default {
   data() {
     return {
       tableData: [{
-        uid: null,
-        temp: null,
+        uid: 0,
+        temp: 0,
       }],
       queryInfo: {
         query: [],
         pageNum: 1,
         pageSize: 5,
       },
-      total: null,
+      total: 0,
       tableHeight: 600,
     };
   },
@@ -112,7 +116,6 @@ export default {
     onCreated(editor) {
       this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
     },
-
     async getStuList() {
       const { data: res } = await http.get("/getStuList", 
       { params: { 
@@ -120,8 +123,8 @@ export default {
         pageNum: this.queryInfo.pageNum, 
         pageSize: this.queryInfo.pageSize, 
       } });
-      //this.tableData = res.data.list;
-      //this.total = res.data.total;
+      this.tableData = res.data.list;
+      this.total = res.data.total;
 
     },
     handleSizeChange(newSize) {
@@ -140,8 +143,18 @@ export default {
     },
     async resetPwd(id){
       const{data:res}=await http.get("/resetPwd",{params:{sid:id}});
-      if(res.code==200)this.$message.success("密码重置成功");
+      if(res.code==200){this.$message.success("密码重置成功");}
       else this.$message.error("删密码重置失败");
+    },
+    async disable(id){
+      const{data:res}=await http.get("/disable",{params:{sid:id}});
+      if(res.code==200){this.$message.success("禁用成功");location.reload(true);}
+      else this.$message.error("禁用失败");
+    },
+    async enable(id){
+      const{data:res}=await http.get("/enable",{params:{sid:id}});
+      if(res.code==200){this.$message.success("启用成功");location.reload(true);}
+      else this.$message.error("启用失败");
     }
 
   },

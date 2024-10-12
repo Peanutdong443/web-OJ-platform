@@ -1,3 +1,4 @@
+
 <template>
   <div class="info-notice-wrapper">
     <div class="search-container">
@@ -7,10 +8,12 @@
             <el-form-item label="实验名称">
               <el-input v-model="queryParams.name" placeholder="请输入实验名称" clearable></el-input>
             </el-form-item>
+            <el-form-item>
+              <div class="search-btn-container" style="display: inline-block; vertical-align: top">
+                <el-button round type="primary" @click="handleSearch()" size="medium" style="margin-top: 2px">查询</el-button>
+              </div>
+            </el-form-item>
           </el-form>
-        </div>
-        <div class="search-btn-container" style="display: inline-block; vertical-align: top">
-          <el-button round type="primary" @click="handleSearch()" size="medium" style="margin-top: 2px">查询</el-button>
         </div>
       </el-card>
     </div>
@@ -29,8 +32,6 @@
           <template slot-scope="scope">
             <el-button size="mini" @click="handleToSubmitWork(scope.$index, scope.row)">{{ userType != "yk" ? "提交实验" :
               "查看实验" }}</el-button>
-            <el-button v-if="userType != 'yk'" size="mini" type="danger"
-              @click="handleDeleteItem(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

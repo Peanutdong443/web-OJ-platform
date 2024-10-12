@@ -19,22 +19,15 @@
                 clearable
               ></el-input>
             </el-form-item>
+            <el-form-item>
+              <div class="search-btn-container" style="display: inline-block; vertical-align: top">
+                <el-button round type="primary" @click="handleSearch()" size="medium" style="margin-top: 2px">查询</el-button>
+                <el-button round size="medium" @click="handleAddItem">新增</el-button>
+              </div>
+            </el-form-item>
           </el-form>
         </div>
-        <div
-          class="search-btn-container"
-          style="display: inline-block; vertical-align: top"
-        >
-          <el-button
-            round
-            type="primary"
-            @click="handleSearch()"
-            size="medium"
-            style="margin-top: 2px"
-            >查询</el-button
-          >
-          <el-button round size="medium" @click="handleAddItem">新增</el-button>
-        </div>
+
       </el-card>
     </div>
     <!-- 中 数据表格 -->
