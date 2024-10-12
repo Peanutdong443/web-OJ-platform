@@ -67,8 +67,8 @@ router.beforeEach((to,from,next)=>{
 
 	//获取user
 	const userFlag = localStorage.getItem('token');
-	if(!userFlag)return next('/login');
-	next();//符合要求 放行
+	if(userFlag==null) return next('/login');
+	else return next();//符合要求 放行
   })
   
 export default router;

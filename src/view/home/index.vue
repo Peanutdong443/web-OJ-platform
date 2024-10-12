@@ -9,6 +9,7 @@
             </el-header>
             <el-main>
                 <el-card class="box-card">
+                  <img class="home" src="../../assets/home.png" alt=""  >
                     <router-view>
                     </router-view>
                 </el-card>
@@ -101,5 +102,14 @@ export default {
 .el-aside {
     border-right: 1px solid;
     border-color: rgba(255, 255, 255, 0.3);
+}
+.home{
+  width: 700px;
+  height: 700px;
+  text-align: center;
+  position: absolute;
+  left: 450px;
+  top: 50px;
+  opacity: 0.06;
 }
 </style>

@@ -86,7 +86,6 @@
 
 <script>
 import http from '../../http.js'
-import {resetPwd} from "@/api/system";
 export default {
   data() {
     return {
@@ -95,15 +94,15 @@ export default {
         temp: null,
       }],
       queryInfo: {
-        query: null,
+        query: [],
         pageNum: 1,
         pageSize: 5,
       },
-      total: "",
+      total: null,
       tableHeight: 600,
     };
   },
-  mounted() {
+  created() {
     this.getStuList();
   },
   methods: {
@@ -121,8 +120,8 @@ export default {
         pageNum: this.queryInfo.pageNum, 
         pageSize: this.queryInfo.pageSize, 
       } });
-      this.tableData = res.data.list;
-      this.total = res.data.total;
+      //this.tableData = res.data.list;
+      //this.total = res.data.total;
 
     },
     handleSizeChange(newSize) {

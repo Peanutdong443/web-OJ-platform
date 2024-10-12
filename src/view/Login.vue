@@ -106,13 +106,12 @@ export default {
           console.log(JSON.stringify(res.data.avatarUrl));
 
           localStorage.setItem("token", JSON.stringify(res.data.token));
-          localStorage.setItem("usertype", this.loginForm.usertype);
           const ptr = JSON.stringify(res.data.avatarUrl);
           let url=ptr.replaceAll("\"","");
 
           localStorage.setItem("avatarUrl", url);
 
-          this.$router.push("/examManage");
+          await this.$router.push("/home");
 
         } else if (res.code == 501) {
           this.$message.error("用户不存在！");

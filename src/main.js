@@ -110,8 +110,8 @@ Vue.use(CascaderPanel);
 Vue.prototype.$axios = axios
 Vue.prototype.$message = Message;
 // 下边的用啥解啥
-// Vue.prototype.$msgbox = MessageBox;
-// Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 
