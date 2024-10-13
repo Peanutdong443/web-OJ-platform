@@ -11,7 +11,7 @@
             </el-form-item>
             <el-form-item>
               <div class="search-btn-container" style="display: inline-block; vertical-align: top">
-                <el-button @click="getStuList()" round type="primary" style="margin-top: 2px;" size="medium">查询</el-button>
+                <el-button @click="getStuList()" round  style="color:white;background-color:rgb(125,11,65);margin-top:2px;" size="medium">查询</el-button>
               </div>
             </el-form-item>
 

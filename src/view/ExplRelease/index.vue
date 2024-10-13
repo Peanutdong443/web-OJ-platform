@@ -21,8 +21,8 @@
             </el-form-item>
             <el-form-item>
               <div class="search-btn-container" style="display: inline-block; vertical-align: top">
-                <el-button round type="primary" @click="handleSearch()" size="medium" style="margin-top: 2px">查询</el-button>
-                <el-button round size="medium" @click="handleAddItem">新增</el-button>
+                <el-button round  @click="handleSearch()" size="medium" style="color:white;background-color:rgb(125,11,65);margin-top:2px" >查询</el-button>
+                <el-button round size="medium" @click="handleAddItem" style="color:white;background-color:rgb(125,11,65);">新增</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -42,7 +42,7 @@
       >
         <el-table-column
           prop="name"
-          label="名称"
+          label="实验名称"
           align="center"
         ></el-table-column>
         <el-table-column prop="id" label="id" align="center"></el-table-column>
@@ -51,6 +51,7 @@
             <el-button
               size="mini"
               @click="handleEditItem(scope.$index, scope.row)"
+              style="color:white;background-color:rgb(125,11,65);"
               >编辑</el-button
             >
             <el-button

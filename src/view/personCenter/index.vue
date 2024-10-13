@@ -19,7 +19,7 @@
       &nbsp;&nbsp;
 
       <el-form-item style="text-align: center;">
-        <el-button type="primary" @click="change()">更新</el-button>
+        <el-button @click="change()" style="color:white;background-color:rgb(125,11,65);">更新</el-button>
         <el-button @click="changepwd()">修改密码</el-button>
         <ChangePassword ref="childDialog"></ChangePassword>
       </el-form-item>

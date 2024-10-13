@@ -10,7 +10,7 @@
             </el-form-item>
             <el-form-item>
               <div class="search-btn-container" style="display: inline-block; vertical-align: top">
-                <el-button round type="primary" @click="handleSearch()" size="medium" style="margin-top: 2px">查询</el-button>
+                <el-button round  style="color:white;background-color:rgb(125,11,65);margin-top:2px" @click="handleSearch()" size="medium" >查询</el-button>
               </div>
             </el-form-item>
           </el-form>
@@ -22,7 +22,7 @@
       <el-table :data="tableData" style="width: 100%" border :max-height="tableHeight" v-loading="tableLoading"
         tooltip-effect="light">
         <el-table-column prop="id" label="id" align="center"></el-table-column>
-        <el-table-column prop="name" label="名称" align="center"></el-table-column>
+        <el-table-column prop="name" label="实验名称" align="center"></el-table-column>
         <el-table-column prop="name" label="提交状态" align="center">
           <template slot-scope="scope">
             {{ submitRecordMap[scope.row.id] ? "已提交" : "未提交" }}
@@ -30,14 +30,14 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="280px">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleToSubmitWork(scope.$index, scope.row)">{{ userType != "yk" ? "提交实验" :
+            <el-button size="mini" style="color:white;background-color:rgb(125,11,65);" @click="handleToSubmitWork(scope.$index, scope.row)">{{ userType != "yk" ? "提交实验" :
               "查看实验" }}</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <el-drawer title="实验详情" :visible.sync="examDetailsVisible" :before-close="handleClearExamDetails" size="1000px"
-      v-loading="examDetailsLoading" :close-on-click-modal="false">
+    <el-drawer title="实验详情"  :visible.sync="examDetailsVisible" :before-close="handleClearExamDetails" size="1000px"
+               v-loading="examDetailsLoading" :close-on-click-modal="false">
       <div style="padding: 15px">
         <el-form :model="formData" :rules="rules" ref="ruleForm" :label-width="formLabelWidth"
           style="height: calc(100vh - 150px); overflow-y: auto" v-if="examDetailsVisible">
@@ -45,43 +45,101 @@
             <div v-html="html"></div>
           </el-form-item>
         </el-form>
-        <div class="drawer-btn">
-          <el-button type="primary" @click="handleSubmitItem">确 定</el-button>
-          <el-button @click="examDetailsVisible = false">取 消</el-button>
-        </div>
       </div>
     </el-drawer>
 
-    <el-drawer title="提交作业" :visible.sync="submitWorkVisible" :before-close="handleClearForm" size="1000px"
+    <el-drawer class="drawer" title="提交实验" direction="ttb" :visible.sync="submitWorkVisible" :before-close="handleClearForm" size="750px"
       :close-on-click-modal="false">
       <div style="padding: 15px">
         <el-form :model="formData" :rules="rules" ref="ruleForm" :label-width="formLabelWidth"
           style="height: calc(100vh - 150px); overflow-y: auto" v-if="submitWorkVisible">
-          <el-form-item label="实验要求">
+          <el-form-item  class="text">
             <div v-html="html"></div>
+            <el-divider content-position="center"><h2 style="color:rgb(125,11,65);font-size: 20px;">代码编写</h2></el-divider>
           </el-form-item>
-          <el-form-item label="实验内容">
-            <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig"
-              :mode="mode" />
-            <Editor style="height: 500px; overflow-y: hidden" v-model="html2" :defaultConfig="editorConfig" :mode="mode"
-              @onCreated="onCreated" />
+          <el-form-item style="text-align: center">
+            <el-button v-loading="loading" @click="handleSubmitItem()" style="color:white;background-color:rgb(125,11,65);">提 交</el-button>
+            <el-button @click="clearEditor()" style="background-color:#ccc;">重 置</el-button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-select v-model="value" filterable placeholder="请选择代码语言">
+              <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <el-tag :type="tagstatus" size="large">{{tagcontent}}</el-tag>
+          </el-form-item>
+          <el-form-item>
+            <prism-editor class="my-editor height-300" id="editor" v-model="sourcecode"
+                          :highlight="highlighter" :line-numbers="lineNumbers">
+            </prism-editor>
           </el-form-item>
         </el-form>
-        <div class="drawer-btn">
-          <el-button type="primary" @click="handleSubmitItem">确 定</el-button>
-          <el-button @click="submitWorkVisible = false">取 消</el-button>
-        </div>
       </div>
     </el-drawer>
   </div>
 </template>
 
 <script>
-import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-import { deepClone } from "@/utils/index";
+import http from "../../http.js";
+
+import { PrismEditor } from 'vue-prism-editor'
+import 'vue-prism-editor/dist/prismeditor.min.css'
+import { highlight, languages } from 'prismjs/components/prism-core'
+import 'prismjs/components/prism-clike'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/themes/prism-tomorrow.css'
 export default {
   data() {
     return {
+
+      sourcecode:'',
+      lineNumbers: true,
+      tagcontent:'检查结果',
+      tagstatus:'',
+      loading:false,
+
+      options: [{
+        value: 75,
+        label: 'C (Clang 7.0.1)'
+      }, {
+        value: 49,
+        label: 'C (GCC 8.3.0)'
+      },{
+        value: 76,
+        label: 'C++ (Clang 7.0.1)'
+      }, {
+        value: 54,
+        label: 'C++ (GCC 9.2.0)'
+      },{
+        value: 62,
+        label: 'Java (OpenJDK 13.0.1)'
+      }, {
+        value: 71,
+        label: 'Python (3.8.1)'
+      },{
+        value: 72,
+        label: 'Python (2.7.17)'
+      }, {
+        value: 73,
+        label: 'Rust (1.40.0)'
+      },{
+        value: 60,
+        label: 'Go (1.13.5)'
+      },{
+        value: 63,
+        label: 'JavaScript (Node.js 12.14.0)'
+      },{
+        value: 59,
+        label: 'Fortran (GFortran 9.2.0)'
+      },
+
+      ],
+      value: '',
+
       tableData: [],
       queryParams: {
         name: "",
@@ -146,8 +204,7 @@ export default {
     };
   },
   components: {
-    Editor,
-    Toolbar,
+    PrismEditor
   },
   mounted() {
     this.dbInit().then((res) => {
@@ -162,6 +219,16 @@ export default {
     editor.destroy(); // 组件销毁时，及时销毁编辑器
   },
   methods: {
+
+    highlighter(code) {
+      return highlight(code, languages.js) //returns html
+    },
+
+    clearEditor(){
+     this.sourcecode='';
+     this.value='';
+    },
+
     dbInit() {
       return new Promise((resolve, reject) => {
         //打开数据库，如果没有就新建一个
@@ -289,29 +356,6 @@ export default {
     resize() {
       this.tableHeight = document.documentElement.clientHeight - 245;
     },
-    handleDeleteItem(idx, row) {
-      this.$confirm("确定删除此内容?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          row.hide = 1;
-          this.dbOperation("put", row).then((res) => {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-            this.handleSearch();
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
     async handleSubmitItem() {
       let _data = {
         id: new Date().getTime(),
@@ -320,15 +364,25 @@ export default {
         examName: this.currentExam.name,
         content: this.html2,
       };
-      const res = await this.dbOperation2("add", _data);
-      this.$message.success("创建成功");
       this.handleSearchSubmitRecord();
-      this.submitWorkVisible = false;
-    },
-    handleClearParams() {
-      this.queryParams = {
-        name: "",
-      };
+
+      const encoder = new TextEncoder();
+      const bytes = encoder.encode(this.sourcecode);
+
+      this.loading=true;
+      const {data:res}=await http.post("submitcode",bytes);
+      if(res.code==200){
+        this.$message.success("提交成功");
+        this.loading=false;
+        switch (res.data.status){
+          case "4":this.tagcontent="结果错误";this.tagstatus="danger";break;
+        }
+      }
+
+
+
+
+
     },
     async handleSearchSubmitRecord() {
       const res = await this.dbOperation2("getAll");
@@ -355,12 +409,6 @@ export default {
         this.submitWorkVisible = true;
       }
     },
-    handleEditItem(idx, row) {
-      this.dialogTitle = "编辑实验";
-      this.formData = deepClone(row);
-      this.html = row.content;
-      this.examDetailsVisible = true;
-    },
     handleSearch() {
       this.dbOperation("getAll").then((res) => {
         if (this.queryParams.name) {
@@ -380,10 +428,43 @@ export default {
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
 <style lang="less">
-.drawer-btn {
-  position: absolute;
-  bottom: 10px;
-  left: 100px;
+
+.my-editor {
+  background: #2d2d2d;
+  color: #ccc;
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+  resize: both;
+  overflow: auto;
+  position:absolute;
+  left: 200px;
+}
+
+/* optional */
+.prism-editor__textarea:focus {
+  outline: none;
+}
+
+/* not required: */
+.height-300 {
+  height: 600px;
+  width: 900px;
+}
+
+.tag{
+  width: 100px;
+}
+
+.el-drawer__header {
+  /* 修改标题容器的样式，例如颜色、字体大小等 */
+  color: rgb(125,11,65);
+  font-size: 30px;
+  text-align: center;
+}
+.drawer{
+  background-color: rgb(125,11,65);
 }
 
 .y-item {

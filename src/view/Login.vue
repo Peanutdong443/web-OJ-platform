@@ -111,7 +111,7 @@ export default {
 
           localStorage.setItem("avatarUrl", url);
 
-          await this.$router.push("/home");
+          await this.$router.push("/examManage");
 
         } else if (res.code == 501) {
           this.$message.error("用户不存在！");
