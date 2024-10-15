@@ -61,7 +61,7 @@
             <el-button v-loading="loading" @click="handleSubmitItem()" style="color:white;background-color:rgb(125,11,65);">提 交</el-button>
             <el-button @click="clearEditor()" style="background-color:#ccc;">重 置</el-button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-select v-model="value" filterable placeholder="请选择代码语言">
+            <el-select v-model="submitForm.langage" filterable placeholder="请选择代码语言">
               <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -101,6 +101,13 @@ export default {
       tagcontent:'检查结果',
       tagstatus:'',
       loading:false,
+
+      submitForm:{
+        qid:'',
+        langage:'',
+        codebytes:'',
+      },
+
 
       options: [{
         value: 75,
@@ -357,33 +364,35 @@ export default {
       this.tableHeight = document.documentElement.clientHeight - 245;
     },
     async handleSubmitItem() {
-      let _data = {
-        id: new Date().getTime(),
-        username: localStorage.getItem("username"),
-        examId: this.currentExam.id,
-        examName: this.currentExam.name,
-        content: this.html2,
-      };
-      this.handleSearchSubmitRecord();
+
+      this.loading=true;
 
       const encoder = new TextEncoder();
       const bytes = encoder.encode(this.sourcecode);
-
-      this.loading=true;
-      const {data:res}=await http.post("submitcode",bytes);
+      this.submitForm.codebytes=bytes;
+      const {data:res}=await http.post("submitcode",{ params: {
+          qid: this.submitForm.qid,
+          language: this.submitForm.langage,
+          codebytes: this.submitForm.codebytes,
+        }});
       if(res.code==200){
         this.$message.success("提交成功");
         this.loading=false;
         switch (res.data.status){
           case "4":this.tagcontent="结果错误";this.tagstatus="danger";break;
+          case "6":this.tagcontent="编译错误";this.tagstatus="warning";break;
+          case "8"||"7"||"9"||"10"||"11"||"12":this.tagcontent="运行超时";this.tagstatus="warning";break;
+          case "3":this.tagcontent="结果正确";this.tagstatus="success";break;
         }
+      }else {
+        this.$message.error("提交失败");
+        this.loading=false;
       }
-
-
-
-
-
     },
+
+
+
+
     async handleSearchSubmitRecord() {
       const res = await this.dbOperation2("getAll");
       for (let i = 0; i < res.length; i++) {
