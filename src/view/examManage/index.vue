@@ -23,23 +23,40 @@
         tooltip-effect="light">
         <el-table-column prop="id" label="id" align="center"></el-table-column>
         <el-table-column prop="name" label="实验名称" align="center"></el-table-column>
+
         <el-table-column prop="name" label="提交状态" align="center">
           <template slot-scope="scope">
             {{ submitRecordMap[scope.row.id] ? "已提交" : "未提交" }}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" width="280px">
-          <template slot-scope="scope">
-            <el-button size="mini" style="color:white;background-color:rgb(125,11,65);" @click="handleToSubmitWork(scope.$index, scope.row)">{{ userType != "yk" ? "提交实验" :
-              "查看实验" }}</el-button>
+          <template slot-scope="scope" >
+            <el-button
+                v-if="usertype == '2'"
+                size="mini"
+                style="color:white;background-color:rgb(125,11,65);"
+                @click="handleToSubmitWork(scope.$index, scope.row)"
+            >
+              提交实验
+            </el-button>
+            <el-button
+                v-else
+                size="mini"
+                style="color:white;background-color:rgb(125,11,65);"
+                @click=""
+            >
+            提交记录
+            </el-button>
           </template>
+
+
         </el-table-column>
       </el-table>
     </div>
     <el-drawer title="实验详情"  :visible.sync="examDetailsVisible" :before-close="handleClearExamDetails" size="1000px"
                v-loading="examDetailsLoading" :close-on-click-modal="false">
       <div style="padding: 15px">
-        <el-form :model="formData" :rules="rules" ref="ruleForm" :label-width="formLabelWidth"
+        <el-form :model="formData" :rules="rules" ref="ruleForm" label-width="100px"
           style="height: calc(100vh - 150px); overflow-y: auto" v-if="examDetailsVisible">
           <el-form-item label="实验内容">
             <div v-html="html"></div>
@@ -51,7 +68,7 @@
     <el-drawer class="drawer" title="提交实验" direction="ttb" :visible.sync="submitWorkVisible" :before-close="handleClearForm" size="750px"
       :close-on-click-modal="false">
       <div style="padding: 15px">
-        <el-form :model="formData" :rules="rules" ref="ruleForm" :label-width="formLabelWidth"
+        <el-form :model="submitForm" :rules="rules"  label-width="100px"
           style="height: calc(100vh - 150px); overflow-y: auto" v-if="submitWorkVisible">
           <el-form-item  class="text">
             <div v-html="html"></div>
@@ -61,7 +78,7 @@
             <el-button v-loading="loading" @click="handleSubmitItem()" style="color:white;background-color:rgb(125,11,65);">提 交</el-button>
             <el-button @click="clearEditor()" style="background-color:#ccc;">重 置</el-button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <el-select v-model="submitForm.langage" filterable placeholder="请选择代码语言">
+            <el-select v-model="value"  filterable placeholder="请选择代码语言">
               <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -104,7 +121,7 @@ export default {
 
       submitForm:{
         qid:'',
-        langage:'',
+        language:null,
         codebytes:'',
       },
 
@@ -143,15 +160,18 @@ export default {
         value: 59,
         label: 'Fortran (GFortran 9.2.0)'
       },
-
       ],
-      value: '',
+      value:'',
+      submitWorkVisible: false,
+      usertype:"",
+
+
 
       tableData: [],
       queryParams: {
         name: "",
       },
-      userType: localStorage.getItem("userType"),
+      userType:1,
       tableLoading: false,
       examDetailsLoading: false,
       dialogTitle: "新增内容",
@@ -160,7 +180,6 @@ export default {
       types: [],
       tableHeight: 600,
       currentRoom: null,
-      submitWorkVisible: false,
       formData: {
         name: "",
       },
@@ -178,7 +197,6 @@ export default {
       fileList: [],
       videoList: [],
       submitRecordMap: [],
-      rules: {},
       seatMap: {},
       currentExam: {},
       indexedDB:
@@ -213,6 +231,9 @@ export default {
   components: {
     PrismEditor
   },
+  created(){
+    this.getUsertype();
+  },
   mounted() {
     this.dbInit().then((res) => {
       this.handleSearch();
@@ -220,12 +241,18 @@ export default {
     this.dbInit2();
     this.handleSearchSubmitRecord();
   },
-  beforeDestroy() {
-    const editor = this.editor;
-    if (editor == null) return;
-    editor.destroy(); // 组件销毁时，及时销毁编辑器
-  },
   methods: {
+
+    async getUsertype(){
+      const { data: res }=await http.get("getUsertype",{
+        headers: {
+          'Authorization': ''+localStorage.getItem("token")
+        }
+      });
+      if(res.code!=200) return this.$message.error("获取用户类型失败");
+      this.usertype=res.data.usertype;
+      return JSON.stringify(res.data.usertype);
+    },
 
     highlighter(code) {
       return highlight(code, languages.js) //returns html
@@ -234,6 +261,10 @@ export default {
     clearEditor(){
      this.sourcecode='';
      this.value='';
+    },
+
+    handleClearForm() {
+      this.submitWorkVisible = false;
     },
 
     dbInit() {
@@ -357,9 +388,6 @@ export default {
       this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
     },
     //初始化对话框，重置对话框
-    handleClearForm() {
-      this.submitWorkVisible = false;
-    },
     resize() {
       this.tableHeight = document.documentElement.clientHeight - 245;
     },
@@ -369,12 +397,18 @@ export default {
 
       const encoder = new TextEncoder();
       const bytes = encoder.encode(this.sourcecode);
-      this.submitForm.codebytes=bytes;
-      const {data:res}=await http.post("submitcode",{ params: {
-          qid: this.submitForm.qid,
-          language: this.submitForm.langage,
-          codebytes: this.submitForm.codebytes,
-        }});
+      // 将字节数组转换为 Base64 字符串
+      const base64Codebytes = btoa(String.fromCharCode(...bytes));
+
+      //提交完整性判断
+      if(this.value==''){this.$message.error("请选择语言");this.loading=false;return;}
+      else if(this.sourcecode==''){this.$message.error("无法提交空代码");this.loading=false;return;}
+
+      // 更新提交表单
+      this.submitForm.codebytes = base64Codebytes;
+      this.submitForm.language=this.value;
+
+      const {data:res}=await http.post("submitcode",this.submitForm);
       if(res.code==200){
         this.$message.success("提交成功");
         this.loading=false;
@@ -411,12 +445,8 @@ export default {
     handleToSubmitWork(id, row) {
       this.html = row.content;
       this.currentExam = row;
-      if (this.userType == "yk") {
-        this.examDetailsVisible = true;
-      } else {
         this.html2 = "";
         this.submitWorkVisible = true;
-      }
     },
     handleSearch() {
       this.dbOperation("getAll").then((res) => {

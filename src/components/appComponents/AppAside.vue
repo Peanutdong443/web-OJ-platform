@@ -24,8 +24,8 @@
               <span>&nbsp;&nbsp;实验列表</span>
             </el-menu-item>
 
-            <template v-if="this.userType == 0"></template>
-            <template v-if="this.userType == 2">
+            <template v-if="this.userType == '0'"></template>
+            <template v-if="this.userType == '2'">
               <el-menu-item index="/submitManage" @click="navigateTo('/submitManage')">
                 &nbsp;&nbsp;
                 <i class="iconfont icon-xueyuan-kaoshi"></i>
@@ -39,7 +39,7 @@
               </el-menu-item>
             </template>
 
-            <template v-if="this.userType == 1">
+            <template v-if="userType == '1'">
 
               <el-menu-item index="/explRelease" @click="navigateTo('/explRelease')">
                 &nbsp;
