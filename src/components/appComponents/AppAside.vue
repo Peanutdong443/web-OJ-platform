@@ -29,7 +29,7 @@
               <el-menu-item index="/submitManage" @click="navigateTo('/submitManage')">
                 &nbsp;&nbsp;
                 <i class="iconfont icon-xueyuan-kaoshi"></i>
-                <span>&nbsp;&nbsp;提交列表</span>
+                <span>&nbsp;&nbsp;待开发模块</span>
               </el-menu-item>
 
               <el-menu-item index="/personCenter" @click="navigateTo('/personCenter')">

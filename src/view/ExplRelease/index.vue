@@ -12,16 +12,18 @@
             class="search-form"
             :model="queryParams"
           >
-            <el-form-item label="实验名称">
+            <el-form-item>
               <el-input
                 v-model="queryParams.name"
-                placeholder="请输入实验名称"
+                style="width:500px;"
+                placeholder="请输入需要查询的实验名称"
                 clearable
               ></el-input>
             </el-form-item>
             <el-form-item>
               <div class="search-btn-container" style="display: inline-block; vertical-align: top">
                 <el-button round  @click="handleSearch()" size="medium" style="color:white;background-color:rgb(125,11,65);margin-top:2px" >查询</el-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 <el-button round size="medium" @click="handleAddItem" style="color:white;background-color:rgb(125,11,65);">新增</el-button>
               </div>
             </el-form-item>
@@ -46,7 +48,7 @@
           align="center"
         ></el-table-column>
         <el-table-column prop="id" label="id" align="center"></el-table-column>
-        <el-table-column label="操作" align="center" width="240px">
+        <el-table-column label="操作" align="center" width="400px">
           <template slot-scope="scope">
             <el-button
               size="mini"

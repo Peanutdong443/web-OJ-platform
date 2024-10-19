@@ -48,43 +48,6 @@
         layout="total, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
-
-    <!--抽屉-->
-    <!-- <el-drawer
-      title="实验记录"
-      :visible.sync="dialogFormVisible"
-      size="1000px"
-      v-loading="drawerLoading"
-    >
-      <div style="padding: 15px">
-        <el-card
-          v-for="(item, index) in studentRecordList"
-          style="margin: 20px"
-        >
-          <div v-html="item.content"></div>
-          <div v-if="item.auditStatus == 1 || item.auditStatus == 2">
-            {{ item.auditStatus == 1 ? "正确" : "错误" }}
-          </div>
-          <div v-else>
-            <el-button
-              type="success"
-              size="mini"
-              @click="handleAudit(item, 1, index)"
-              >正确</el-button
-            >
-            <el-button
-              type="error"
-              size="mini"
-              @click="handleAudit(item, 2, index)"
-              >错误</el-button
-            >
-          </div>
-        </el-card>
-        <div class="drawer-btn">
-          <el-button @click="dialogFormVisible = false">关闭</el-button>
-        </div>
-      </div>
-    </el-drawer> -->
   </div>
 </template>
 
